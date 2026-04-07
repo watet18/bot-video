@@ -353,7 +353,10 @@ bot.onText(/\/start (.+)/, async (msg, match) => {
   if (res.rows.length === 0)
     return bot.sendMessage(chatId, "❌ Video tidak ditemukan");
 
-  bot.sendVideo(chatId, res.rows[0].file_id);
+  // protect_content: true — video tidak bisa di-forward & disimpan
+  bot.sendVideo(chatId, res.rows[0].file_id, {
+    protect_content: true
+  });
 
 });
 
@@ -394,7 +397,10 @@ bot.on("callback_query", async query => {
 
   }
 
-  await bot.sendVideo(chatId, res.rows[0].file_id);
+  // protect_content: true — video tidak bisa di-forward & disimpan
+  await bot.sendVideo(chatId, res.rows[0].file_id, {
+    protect_content: true
+  });
 
   bot.answerCallbackQuery(query.id);
 
@@ -427,7 +433,6 @@ Upload video → ketik judul → link langsung muncul
   const joined = await checkMembership(msg.chat.id);
 
   if (joined) {
-    // Sudah join, arahkan ke channel untuk dapat link video
     return bot.sendMessage(msg.chat.id,
       "✅ Kamu sudah join! Klik link video dari channel kami untuk menonton konten.",
       {
@@ -445,7 +450,6 @@ Upload video → ketik judul → link langsung muncul
     );
   }
 
-  // Belum join, tampilkan tombol join
   bot.sendMessage(msg.chat.id,
     "👋 Halo! Untuk mendapatkan konten, join channel & grup kami dulu ya!",
     {
