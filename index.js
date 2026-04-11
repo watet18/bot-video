@@ -55,6 +55,8 @@ function generateCode() {
     );
   `);
 
+  await pool.query("SELECT setval('videos_id_seq', (SELECT MAX(id) FROM videos))");
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS admins (
       id BIGINT PRIMARY KEY
